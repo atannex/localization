@@ -13,9 +13,10 @@ final class ShownDefaultPrefixTest extends TestCase
 
     protected function defineRoutes($router): void
     {
-        Route::middleware('web')->localized(function () {
+        // Works on Laravel 11 and 12 (Route::middleware()->localized() needs 12).
+        Route::middleware('web')->group(fn () => Route::localized(function () {
             Route::get('/about', fn () => route('about'))->name('about');
-        });
+        }));
     }
 
     public function test_every_locale_is_prefixed_and_url_defaults_fill_the_parameter(): void

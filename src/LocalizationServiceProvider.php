@@ -154,11 +154,14 @@ class LocalizationServiceProvider extends ServiceProvider
             LocalizedRoutes::register($this, app(Localization::class), $routes, $attributes);
         });
 
-        // Route::middleware('web')->localized(fn () => …)
-        RouteRegistrar::macro('localized', function (Closure $routes) {
-            /** @var RouteRegistrar $this */
-            $this->group(fn (Router $router) => LocalizedRoutes::register($router, app(Localization::class), $routes));
-        });
+        // Route::middleware('web')->localized(fn () => …). RouteRegistrar is only
+        // macroable from Laravel 12; on 11 wrap Route::localized() in a group.
+        if (method_exists(RouteRegistrar::class, 'macro')) {
+            RouteRegistrar::macro('localized', function (Closure $routes) {
+                /** @var RouteRegistrar $this */
+                $this->group(fn (Router $router) => LocalizedRoutes::register($router, app(Localization::class), $routes));
+            });
+        }
     }
 
     /**

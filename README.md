@@ -132,10 +132,12 @@ The page has the same URL in every language. If the `query` detector is enabled,
 ### Prefixes (`prefix`)
 
 ```php
-Route::middleware('web')->localized(function () {
+Route::middleware('web')->group(fn () => Route::localized(function () {
     Route::get('/', HomeController::class)->name('home');
     Route::get('/about', AboutController::class)->name('about');
-});
+}));
+
+// Laravel 12 can chain it: Route::middleware('web')->localized(fn () => …);
 ```
 
 | | `hide_default => true` (default) | `hide_default => false` |
