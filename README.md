@@ -112,12 +112,32 @@ The detectors in `detectors` run in order; the first one that names a supported 
 | `header` | `Accept-Language`, honouring q-values, with region and script matching |
 | `geo` | a country header from your CDN (`CF-IPCountry`…), through `geo.countries` |
 
-Add your own:
+Add your own, then list its name in `detectors` where it should run:
 
 ```php
 Localization::extendDetector('subdomain', fn (Request $request) => explode('.', $request->getHost())[0]);
-// or a class implementing Atannex\Localization\Contracts\Detector, listed by class name
 ```
+
+Or a class, listed by class name and resolved from the container:
+
+```php
+use Atannex\Localization\Contracts\Detector;
+use Atannex\Localization\LocaleRegistry;
+use Illuminate\Http\Request;
+
+final class AppHeaderDetector implements Detector
+{
+    public function detect(Request $request, LocaleRegistry $locales): ?string
+    {
+        return $request->header('X-App-Locale');   // any tag; null lets the next detector try
+    }
+}
+
+// config/localization.php
+'detectors' => ['route', 'query', 'user', AppHeaderDetector::class, 'cookie', 'header'],
+```
+
+A detector returns a tag, not a supported code: `fr-CM` or `PT_BR` is matched like any other. Device or client details (a mobile app's header, a User-Agent library's verdict) come in this way; the package does not parse User-Agents itself.
 
 `SetLocale` (alias `localize`) applies the result and sets `Content-Language`. Under the `none` strategy it also adds `Vary: Accept-Language, Cookie`, because one address answers in several languages. `->middleware('localize:fr')` forces a locale.
 
@@ -216,6 +236,8 @@ $user->setPreferredLocale('pt-br');   // stored as 'pt_BR'; unsupported values a
 $user->preferredLocale();             // read by the user detector, notifications and mail
 Localization::persist('fr');          // runs the configured stores and fires LocaleSwitched
 ```
+
+The user preference follows the account to every device; the cookie stays with one browser. With the default order the account wins. To let each device keep its own choice, put `cookie` before `user` in `detectors`.
 
 ## Translatable models
 
