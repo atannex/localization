@@ -7,11 +7,3 @@ Runs a Laravel site in several languages. It works out which language each visit
 ```bash
 composer require atannex/localization
 ```
-
-## Documentation
-
-The full guide is in [docs/README.md](docs/README.md).
-
-## License
-
-MIT.
