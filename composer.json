@@ -1,6 +1,6 @@
 {
     "name": "atannex/localization",
-    "description": "Complete localization for Laravel: locale registry with a built-in catalog, request negotiation (URL prefix, domain, query, user, session, cookie, Accept-Language, geo), localized URLs and hreflang, a language switcher, translatable Eloquent attributes with driver-aware JSON queries, locale-aware formatting, queue locale propagation, missing-key tracking, translation coverage tooling and a Filament plugin.",
+    "description": "Complete localization for Laravel: locale registry with a built-in catalog, request negotiation (URL prefix, domain, query, user, session, cookie, Accept-Language, geo), localized URLs and hreflang, a language switcher, translatable Eloquent attributes with driver-aware JSON queries, locale-aware formatting, queue locale propagation, missing-key tracking and translation coverage tooling.",
     "keywords": [
         "laravel",
         "localization",
@@ -10,8 +10,7 @@
         "translation",
         "translatable",
         "hreflang",
-        "multilingual",
-        "filament"
+        "multilingual"
     ],
     "type": "library",
     "license": "MIT",
@@ -37,8 +36,7 @@
         "phpunit/phpunit": "^11.5"
     },
     "suggest": {
-        "ext-intl": "Native number, currency, list and language-name formatting in every locale.",
-        "filament/filament": "For Atannex\\Localization\\Filament\\LocalizationPlugin (^4.0)."
+        "ext-intl": "Native number, currency, list and language-name formatting in every locale."
     },
     "autoload": {
         "psr-4": {
